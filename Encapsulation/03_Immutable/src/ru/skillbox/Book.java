@@ -1,20 +1,20 @@
 package ru.skillbox;
 
 public class Book {
-    private final String name;
+    private final String title;
     private final String author;
     private final int pageCount;
     private final int isbn;
 
-    public Book(String name, String author, int pageCount, int isbn) {
-        this.name = name;
+    public Book(String title, String author, int pageCount, int isbn) {
+        this.title = title;
         this.author = author;
         this.pageCount = pageCount;
         this.isbn = isbn;
     }
 
-    public String getName() {
-        return name;
+    public String getTitle() {
+        return title;
     }
 
     public String getAuthor() {
