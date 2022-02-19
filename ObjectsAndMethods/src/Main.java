@@ -12,7 +12,7 @@ public class Main {
         System.out.println("Их максимум = " + arithmetic.max());
         System.out.println("Их минимум = " + arithmetic.min());*/
 
-        Printer printer = new Printer();
+        /*Printer printer = new Printer();
         printer.add("Война и мир", "много умного текста", 1200);
         printer.add("какая-то еще книга", 83);
         printer.add("Тихий Дон", "еще больше умного текста");
@@ -21,7 +21,15 @@ public class Main {
         printer.add("какой-то текст без заголовка", 138);
         printer.add("просто текст");
         printer.print("Вторая печать:");
-        System.out.println("Всего напечатано: " + printer.getTotalPageAmountPrinted() + " страниц.");
+        System.out.println("Всего напечатано: " + printer.getTotalPageAmountPrinted() + " страниц.");*/
+        Dimensions dimensions = new Dimensions(3,5,9);
+        dimensions.volume();
+        Cargo cargo = new Cargo(dimensions,
+                10,
+                "N/a",
+                true,
+                123,
+                false);
 
     }
 }
