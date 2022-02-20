@@ -1,6 +1,12 @@
 public class Main {
 
     public static void main(String[] args) {
+
+        ArithmeticCalculator calculator = new ArithmeticCalculator(100, 98);
+        System.out.println(calculator.calculate(Operation.ADD));
+        System.out.println(calculator.calculate(Operation.MULTIPLY));
+        System.out.println(calculator.calculate(Operation.SUBTRACT));
+
         /*Basket basket = new Basket();
         basket.add("Milk", 40);
         basket.print("Milk");*/
@@ -22,7 +28,7 @@ public class Main {
         printer.add("просто текст");
         printer.print("Вторая печать:");
         System.out.println("Всего напечатано: " + printer.getTotalPageAmountPrinted() + " страниц.");*/
-        Dimensions dimensions = new Dimensions(3,5,9);
+        /*Dimensions dimensions = new Dimensions(3,5,9);
         dimensions.volume();
         Cargo cargo = new Cargo(dimensions,
                 10,
@@ -30,6 +36,6 @@ public class Main {
                 true,
                 123,
                 false);
-
+*/
     }
 }
