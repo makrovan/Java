@@ -24,6 +24,11 @@ public class Computer {
     public Computer(String vendor, String name) {
         this.vendor = vendor;
         this.name = name;
+        cpu = new Cpu(0,0,"N/A",0);
+        memory = new Memory("N/A",0,0);
+        disk = new Disk(DiskType.HDD, 0,0);
+        screen = new Screen(0,ScreenType.IPS,0);
+        keyboard = new Keyboard("N/A", false, 0);
     }
 
     @Override
@@ -31,11 +36,11 @@ public class Computer {
         return "Computer{" +
                 "vendor='" + vendor + '\'' +
                 ", name='" + name + '\'' +
-                ", cpu=" + cpu +
-                ", memory=" + memory +
-                ", disk=" + disk +
-                ", screen=" + screen +
-                ", keyboard=" + keyboard +
+                ", cpu=" + cpu.toString() +
+                ", memory=" + memory.toString() +
+                ", disk=" + disk.toString() +
+                ", screen=" + screen.toString() +
+                ", keyboard=" + keyboard.toString() +
                 '}';
     }
 
