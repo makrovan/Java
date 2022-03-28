@@ -63,7 +63,7 @@ public class Company {
         }
     }
 
-    //возвращаем отсортированный набор
+    /*//возвращаем отсортированный набор
     Set<Worker> sortList() {
         Set<Worker> workerSet = new TreeSet<>();
         for (Employee employee : employees){
@@ -72,12 +72,13 @@ public class Company {
         //ArrayList workerList = new ArrayList<>(workerSet);
         //Collections.sort(workerList);
         return workerSet;
-    }
+    }*/
 
     //сотрудники с самыми высокими заработными платами, отсортированный по убыванию
     List<Employee> getTopSalaryStaff(int count) {
 
-        ArrayList<Worker> workers = new ArrayList<>(sortList());
+        //TreeSet<Employee> employeeSet = ;
+        ArrayList<Employee> workers = new ArrayList<>(new TreeSet<>(employees));
 
         count = Math.min(count, workers.size());
         count = Math.max(count, 0);
@@ -92,7 +93,8 @@ public class Company {
     //сотрудники с самыми низкими заработными платами, отсортированный по возрастанию
     List<Employee> getLowestSalaryStaff(int count){
 
-        ArrayList<Worker> workers = new ArrayList<>(sortList());
+        //ArrayList<Worker> workers = new ArrayList<>(sortList());
+        ArrayList<Employee> workers = new ArrayList<>(new TreeSet<>(employees));
 
         count = Math.min(count, workers.size());
         count = Math.max(count, 0);

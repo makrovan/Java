@@ -1,4 +1,4 @@
-public abstract class Worker implements Employee, Comparable {
+public abstract class Worker implements Employee {
     protected int fixPartOfSalary;
 
     public Worker(int fixPartOfSalary) {
@@ -8,11 +8,5 @@ public abstract class Worker implements Employee, Comparable {
     @Override
     public String toString() {
         return this.getClass().getName() + ": " + getMonthSalary() + " руб.";
-    }
-
-    @Override
-    public int compareTo(Object o) {
-        Worker operator = (Worker) o;
-        return Integer.compare(getMonthSalary(), operator.getMonthSalary());
     }
 }
