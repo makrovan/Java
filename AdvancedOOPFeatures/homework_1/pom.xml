@@ -75,6 +75,12 @@
       <artifactId>checkstyle</artifactId>
       <version>${puppycrawl.version}</version>
     </dependency>
+      <dependency>
+          <groupId>ru.skillbox</groupId>
+          <artifactId>LambdaExpressions-Employee</artifactId>
+          <version>1.0-SNAPSHOT</version>
+          <scope>test</scope>
+      </dependency>
   </dependencies>
 
 </project>
