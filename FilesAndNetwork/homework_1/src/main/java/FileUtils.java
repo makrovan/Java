@@ -1,20 +1,16 @@
 import java.io.File;
+import java.util.Objects;
+import java.util.stream.Stream;
 
 public class FileUtils {
-    //File rootDirectory;
-    private static long fileSize;
 
-    private static void calculateFileSizeInFolder(File directory)
+    private static long calculateFileSizeInFolder(File directory)
     {
-        File[] files = directory.listFiles();
-        if (files == null)
-            return;
-        for (File file : files) {
-            if (file.isDirectory()) {
-                calculateFileSizeInFolder(file);
-            } else {
-                fileSize += file.length();
-            }
+        try {
+            Stream <File> fileStream = Stream.of(Objects.requireNonNull(directory.listFiles()));
+            return fileStream.mapToLong(file -> !file.isDirectory() ? file.length() : calculateFileSizeInFolder(file)).sum();
+        } catch (NullPointerException ex) {
+            return 0;
         }
     }
 
@@ -23,9 +19,7 @@ public class FileUtils {
         if (!rootDirectory.isDirectory()) {
             throw new IllegalArgumentException("Введен неверный путь директории!");
         }
-        fileSize = 0;
-        calculateFileSizeInFolder(rootDirectory);
-        return fileSize;
+        return calculateFileSizeInFolder(rootDirectory);
     }
 
     public static String printFileSize(long fileSizeInBytes)
