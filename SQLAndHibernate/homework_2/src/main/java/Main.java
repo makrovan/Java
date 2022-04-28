@@ -6,6 +6,9 @@ import org.hibernate.boot.MetadataSources;
 import org.hibernate.boot.registry.StandardServiceRegistry;
 import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
 
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Root;
 import java.util.List;
 
 public class Main {
@@ -19,7 +22,23 @@ public class Main {
         Session session = sessionFactory.openSession();
         Transaction transaction = session.beginTransaction();
 
-        Student student = session.get(Student.class, 2);
+        CriteriaBuilder builder = session.getCriteriaBuilder();
+        CriteriaQuery<Student> query = builder.createQuery(Student.class);
+        Root<Student> root = query.from(Student.class);
+        query.select(root);
+        List<Student> studentList = session.createQuery(query).getResultList();
+
+        studentList.forEach(s -> {
+            List<Course> courses = s.getCoursePurchaseList();
+            courses.forEach(c -> {
+                LinkedPurchase linkedPurchase = new LinkedPurchase(new LinkedPurchase.LinkedPurchaseKey(s.getId(), c.getId()),
+                        s.getId(), c.getId());
+                session.save(linkedPurchase);
+            });
+        });
+
+
+        /*Student student = session.get(Student.class, 2);
         System.out.println(student);
         System.out.println("---------------------Subscriptions courses of student ----------------------------------");
         List<Course> courseList = student.getCourseSubscriptionList(); //many to many
@@ -58,7 +77,7 @@ public class Main {
                     new Purchase.PurchaseKey(s.getName(), course.getName()));
             System.out.println(purchase);
             //System.out.println(subscription);
-        });
+        });*/
 
 
         transaction.commit();

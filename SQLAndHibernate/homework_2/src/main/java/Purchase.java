@@ -19,12 +19,12 @@ public class Purchase {
 
 
     //private String studentName;
-    @ManyToOne(cascade = CascadeType.ALL)
+    @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @JoinColumn(name="student_name", referencedColumnName = "name", insertable=false, updatable=false)
     private Student student;
 
     //private String courseName;
-    @ManyToOne(cascade = CascadeType.ALL)
+    @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @JoinColumn(name="course_name", referencedColumnName = "name", insertable=false, updatable=false)
     private Course course;
 
@@ -39,7 +39,7 @@ public class Purchase {
     @Data
     @AllArgsConstructor
     @EqualsAndHashCode
-    public static class PurchaseKey implements Serializable {
+    public class PurchaseKey implements Serializable {
 
         @Column(name = "student_name")
         private String studentName;
