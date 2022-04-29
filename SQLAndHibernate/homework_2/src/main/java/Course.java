@@ -17,7 +17,7 @@ public class Course implements Serializable
     private int id;
     @OneToMany(mappedBy = "course")
     private List<Subscription> subscriptions;   //все подписки курса
-    @ManyToMany(cascade = CascadeType.ALL)
+    @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @JoinTable(name = "Subscriptions",
             joinColumns = {@JoinColumn(name = "course_id")},
             inverseJoinColumns = {@JoinColumn(name = "student_id")})
@@ -28,7 +28,7 @@ public class Course implements Serializable
     private String name;
     @OneToMany(mappedBy = "course")
     private List<Purchase> purchases;   //все покупки курса
-    @ManyToMany(cascade = CascadeType.ALL)
+    @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @JoinTable(name = "PurchaseList",
             joinColumns = {@JoinColumn(name = "course_name", referencedColumnName = "name")},
             inverseJoinColumns = {@JoinColumn(name = "student_name", referencedColumnName = "name")})
@@ -37,6 +37,7 @@ public class Course implements Serializable
     @ToString.Include
     private int duration;
 
+    public enum CourseType { DESIGN, PROGRAMMING, MARKETING, MANAGEMENT, BUSINESS }
     @Enumerated(EnumType.STRING)
     @Column(columnDefinition = "enum")
     @ToString.Include
@@ -46,13 +47,13 @@ public class Course implements Serializable
     private String description;
 
     //@Column(name = "teacher_id")
-    @ManyToOne(cascade = CascadeType.ALL)       //один учитель может вести много курсов
+    @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)       //один учитель может вести много курсов
     @ToString.Include
     private Teacher teacher;
 
-    @Column(name = "students_count")
+    @Column(name = "students_count", nullable = true)
     @ToString.Include
-    private int studentsCount;
+    private Integer studentsCount;
 
     @ToString.Include
     private int price;

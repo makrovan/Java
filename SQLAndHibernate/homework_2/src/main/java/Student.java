@@ -1,5 +1,6 @@
 import lombok.Data;
 import lombok.ToString;
+import org.hibernate.annotations.NaturalId;
 
 import javax.persistence.*;
 import java.io.Serializable;
