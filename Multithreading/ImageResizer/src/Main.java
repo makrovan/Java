@@ -1,51 +1,36 @@
+import org.imgscalr.Scalr;
+
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
 import java.io.File;
 
 public class Main {
 
+    private static int newWidth = 300;
+
     public static void main(String[] args) {
-        String srcFolder = "/users/sortedmap/Desktop/src";
-        String dstFolder = "/users/sortedmap/Desktop/dst";
+        String srcFolder = "/users/anton/Desktop/src";
+        String dstFolder = "/users/anton/Desktop/dst";
 
         File srcDir = new File(srcFolder);
 
+        final int cores = Runtime.getRuntime().availableProcessors();
+        System.out.println("Количество доступных ядер = " + cores);
         long start = System.currentTimeMillis();
 
         File[] files = srcDir.listFiles();
-
-        try {
-            for (File file : files) {
-                BufferedImage image = ImageIO.read(file);
-                if (image == null) {
-                    continue;
-                }
-
-                int newWidth = 300;
-                int newHeight = (int) Math.round(
-                    image.getHeight() / (image.getWidth() / (double) newWidth)
-                );
-                BufferedImage newImage = new BufferedImage(
-                    newWidth, newHeight, BufferedImage.TYPE_INT_RGB
-                );
-
-                int widthStep = image.getWidth() / newWidth;
-                int heightStep = image.getHeight() / newHeight;
-
-                for (int x = 0; x < newWidth; x++) {
-                    for (int y = 0; y < newHeight; y++) {
-                        int rgb = image.getRGB(x * widthStep, y * heightStep);
-                        newImage.setRGB(x, y, rgb);
-                    }
-                }
-
-                File newFile = new File(dstFolder + "/" + file.getName());
-                ImageIO.write(newImage, "jpg", newFile);
+        int threadCount = (((files.length / cores) * cores) == files.length) ? cores : cores - 1;
+        int fileCount = files.length / threadCount;
+        for (int fileStart = 0; fileStart <= files.length; fileStart += fileCount)
+        {
+            int fileEnd = (fileStart + fileCount > files.length) ? files.length : fileStart + fileCount;
+            if ((fileEnd - fileStart) == 0) {
+                continue;
             }
-        } catch (Exception ex) {
-            ex.printStackTrace();
+            File[] files1 = new File[fileEnd - fileStart];
+            System.arraycopy(files, fileStart, files1, 0, fileEnd - fileStart);
+            ImageResizer resizer = new ImageResizer(files1, newWidth, dstFolder, start);
+            new Thread(resizer).start();
         }
-
-        System.out.println("Duration: " + (System.currentTimeMillis() - start));
     }
 }
