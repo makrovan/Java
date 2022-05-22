@@ -12,8 +12,9 @@ public class DefaulController
     @RequestMapping("/")
     public String index()
     {
-        Random random = new Random();
+        /*Random random = new Random();
         int rand_int = random.nextInt();
-        return (new Date()).toString() + rand_int;
+        return (new Date()).toString() + rand_int;*/
+        return "Hello string!";
     }
 }
