@@ -3,10 +3,11 @@ package main;
 import response.Deal;
 
 import java.util.*;
+import java.util.concurrent.atomic.AtomicInteger;
 
 public class DealStorage
 {
-    private static int currentId = 1;
+    private static AtomicInteger currentId = new AtomicInteger(0);
     private static Map<Integer, Deal> deals = Collections.synchronizedMap(new HashMap<>());
 
     public static List<Deal> getAllDeals(){
@@ -15,7 +16,7 @@ public class DealStorage
     }
 
     public static int addDeals(Deal deal){
-        int id = currentId++;
+        int id = currentId.incrementAndGet();
         deal.setId(id);
         deals.put(id, deal);
         return id;
@@ -38,6 +39,7 @@ public class DealStorage
 
     public static boolean updateDeal(int dealId, Deal deal){
         if (deals.containsKey(dealId)) {
+            deal.setId(dealId);
             deals.replace(dealId, deal);
             return true;
         }

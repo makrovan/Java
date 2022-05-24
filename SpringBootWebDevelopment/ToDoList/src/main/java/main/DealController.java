@@ -11,36 +11,37 @@ import java.util.List;
 public class DealController
 {
     @RequestMapping(value = "/deals/", method = RequestMethod.GET)
-    public List<Deal> list(){
+    public List<Deal> listAllDeals(){
         return DealStorage.getAllDeals();
     }
 
-    @RequestMapping(value = "/deals/", method = RequestMethod.POST)
-    public int add(Deal deal){
+    @PostMapping("/deals/")
+    public int addDeal(@RequestBody Deal deal){
         return DealStorage.addDeals(deal);
     }
 
     @RequestMapping(value = "/deals/", method = RequestMethod.DELETE)
-    public void deleteAll(){
+    public void deleteAllDeals(){
         DealStorage.deleteAllDeals();
     }
 
     @GetMapping("/deals/{id}")
-    public ResponseEntity get(@PathVariable int id){
+    public ResponseEntity<Deal> getDeal(@PathVariable int id){
         Deal deal = DealStorage.getDeal(id);
         if (deal == null) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
         return new ResponseEntity(deal, HttpStatus.OK);
     }
 
     @PostMapping("/deals/{id}")
-    public ResponseEntity denial(@PathVariable int id){
+    public ResponseEntity addDealWithId(@PathVariable int id, @RequestBody(required = false) Deal deal)
+    {
         return ResponseEntity.status(HttpStatus.METHOD_NOT_ALLOWED).body(null);
     }
 
     @PutMapping("/deals/{id}")
-    public ResponseEntity updateDeal(@PathVariable int id, Deal deal){
+    public ResponseEntity updateDeal(@PathVariable int id, @RequestBody Deal deal){
         if (DealStorage.updateDeal(id, deal)) {
             return ResponseEntity.status(HttpStatus.OK).body(null);
         }
