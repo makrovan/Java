@@ -1,37 +1,49 @@
 package main;
 
+import main.model.DealRepository;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import response.Deal;
+import main.model.Deal;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 public class DealController
 {
+    @Autowired
+    private DealRepository dealRepository;
     @RequestMapping(value = "/deals/", method = RequestMethod.GET)
     public List<Deal> listAllDeals(){
-        return DealStorage.getAllDeals();
+        Iterable<Deal> dealIterable = dealRepository.findAll();
+        ArrayList<Deal> deals = new ArrayList<>();
+        for (Deal deal : dealIterable){
+            deals.add(deal);
+        }
+        return deals;
     }
 
-    @PostMapping("/deals/")
+    @RequestMapping(value = "/deals/", method = RequestMethod.POST)
     public int addDeal(@RequestBody Deal deal){
-        return DealStorage.addDeals(deal);
+        Deal newDeal = dealRepository.save(deal);
+        return newDeal.getId();
     }
 
     @RequestMapping(value = "/deals/", method = RequestMethod.DELETE)
-    public void deleteAllDeals(){
-        DealStorage.deleteAllDeals();
+    public void deleteAll(){
+        dealRepository.deleteAll();
     }
 
     @GetMapping("/deals/{id}")
     public ResponseEntity<Deal> getDeal(@PathVariable int id){
-        Deal deal = DealStorage.getDeal(id);
-        if (deal == null) {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        Optional<Deal> optionalDeal = dealRepository.findById(id);
+        if (optionalDeal.isEmpty()) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
         }
-        return new ResponseEntity(deal, HttpStatus.OK);
+        return new ResponseEntity(optionalDeal.get(), HttpStatus.OK);
     }
 
     @PostMapping("/deals/{id}")
@@ -41,18 +53,24 @@ public class DealController
     }
 
     @PutMapping("/deals/{id}")
-    public ResponseEntity updateDeal(@PathVariable int id, @RequestBody Deal deal){
-        if (DealStorage.updateDeal(id, deal)) {
-            return ResponseEntity.status(HttpStatus.OK).body(null);
+    public ResponseEntity<Deal> updateDeal(@PathVariable int id, @RequestBody Deal deal){
+        Optional<Deal> optionalDeal = dealRepository.findById(id);
+        if (optionalDeal.isEmpty()) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
         }
-        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
+        optionalDeal.get().setName(deal.getName());
+        optionalDeal.get().setToDo(deal.getToDo());
+        dealRepository.save(optionalDeal.get());
+        return new ResponseEntity(optionalDeal.get(), HttpStatus.OK);
     }
 
     @DeleteMapping("/deals/{id}")
-    public ResponseEntity delete(@PathVariable int id){
-        if (DealStorage.deleteDeal(id)) {
-            return ResponseEntity.status(HttpStatus.OK).body(null);
+    public ResponseEntity deleteDeal(@PathVariable int id){
+        Optional<Deal> optionalDeal = dealRepository.findById(id);
+        if (optionalDeal.isEmpty()) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
         }
-        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
+        dealRepository.deleteById(id);
+        return ResponseEntity.status(HttpStatus.OK).body(null);
     }
 }
