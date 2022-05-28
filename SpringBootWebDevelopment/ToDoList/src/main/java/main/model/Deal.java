@@ -19,4 +19,9 @@ public class Deal {
     private int id;
     private String name;
     private String toDo;
+
+    public Deal(String name, String toDo) {
+        this.name = name;
+        this.toDo = toDo;
+    }
 }

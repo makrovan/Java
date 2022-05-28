@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>ToDoList</title>
+</head>
+<body>
+<div align="center">
+    <h2>My ToDo List:</h2>
+    <form method="post">
+        <input type="text" name="name" />
+        <input type="text" name="toDo" />
+        <input type="submit" value="Add Deal" />
+    </form>
+    <h2>ToDo List of <span th:text="${dealsCount}">0</span> : deals</h2>
+    <table border="1" cellpadding="2">
+        <tr>
+            <th>Name:</th>
+            <th>ToDo:</th>
+        </tr>
+        <div th:each="deal : ${deals}">
+            <tr>
+                <td th:text="${deal.name}"></td>
+                <td th:text="${deal.toDo}"></td>
+            </tr>
+        </div>
+    </table>
+</div>
+</body>
+</html>
