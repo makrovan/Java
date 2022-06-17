@@ -1,27 +1,42 @@
-import org.w3c.dom.Document;
+/*import org.w3c.dom.Document;
 import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
-import org.w3c.dom.NodeList;
+import org.w3c.dom.NodeList;*/
 
+/*
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.parsers.SAXParser;
+import javax.xml.parsers.SAXParserFactory;
 import java.io.File;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
+*/
+
+import javax.xml.parsers.SAXParser;
+import javax.xml.parsers.SAXParserFactory;
+import java.io.File;
 
 public class Loader {
 
-    private static SimpleDateFormat birthDayFormat = new SimpleDateFormat("yyyy.MM.dd");
-    private static SimpleDateFormat visitDateFormat = new SimpleDateFormat("yyyy.MM.dd HH:mm:ss");
-
-    private static HashMap<Integer, WorkTime> voteStationWorkTimes = new HashMap<>();
-    private static HashMap<Voter, Integer> voterCounts = new HashMap<>();
-
     public static void main(String[] args) throws Exception {
-        String fileName = "res/data-1M.xml";
+        long usage = Runtime.getRuntime().totalMemory() - Runtime.getRuntime().freeMemory();
+        String fileName = "res/data-18M.xml";
 
-        parseFile(fileName);
+        SAXParserFactory factory = SAXParserFactory.newInstance();
+        SAXParser parser = factory.newSAXParser();
+        XMLHandler handler = new XMLHandler();
+        parser.parse(new File(fileName), handler);
+        handler.printVotingStationWorkTime();
+        handler.printDublicatedVoters();
+        handler.optimizeData();
+
+        Runtime.getRuntime().gc();
+        usage = Runtime.getRuntime().totalMemory() - Runtime.getRuntime().freeMemory() - usage;
+        System.out.println(usage + " bytes usaged.");
+
+        /*parseFile(fileName);
 
         //Printing results
         System.out.println("Voting station work times: ");
@@ -36,19 +51,19 @@ public class Loader {
             if (count > 1) {
                 System.out.println("\t" + voter + " - " + count);
             }
-        }
+        }*/
     }
 
-    private static void parseFile(String fileName) throws Exception {
+    /*private static void parseFile(String fileName) throws Exception {
         DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
         DocumentBuilder db = dbf.newDocumentBuilder();
         Document doc = db.parse(new File(fileName));
 
         findEqualVoters(doc);
         fixWorkTimes(doc);
-    }
+    }*/
 
-    private static void findEqualVoters(Document doc) throws Exception {
+    /*private static void findEqualVoters(Document doc) throws Exception {
         NodeList voters = doc.getElementsByTagName("voter");
         int votersCount = voters.getLength();
         for (int i = 0; i < votersCount; i++) {
@@ -81,5 +96,5 @@ public class Loader {
             }
             workTime.addVisitTime(time.getTime());
         }
-    }
+    }*/
 }
